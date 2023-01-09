@@ -7,10 +7,10 @@ const zx = {
     allSlices : {}, // will gather all slices for tests and execution
     createSlice : function(slice){
     if (zx.allSlices[slice.name] !== undefined &&
-      verifyType(slice.name, "String") &&
-      verifyType(slice.body, "Function") &&
+      zx.verifyType(slice.name, "String") &&
+      zx.verifyType(slice.body, "Function") &&
       verifyClass(mySlice.signature, "Array") &&
-      verifyType(slice.test, "Function")){
+      zx.verifyType(slice.test, "Function")){
         throw new Error(slice.name + 'slice already exists');
       } else {
         zx.allSlices[slice.name] = slice;
@@ -80,7 +80,7 @@ const zx = {
    * @throws {Error} - If the expectedType parameter is not an acceptable value
    * @throws {TypeError} - If the value does not have the expected type
    */
-  function verifyType(val, expectedType) {
+    zx.verifyType = function (val, expectedType) {
     zx.log('verifyType : ' +  Object.prototype.toString.call(val) + ' is ' + expectedType );
   
     // Check if the expectedType parameter is a string
@@ -130,22 +130,22 @@ const zx = {
     return(JSON.stringify(result))
   };
   
-  verifyType.test = zx.libraryTests['verifyType'] = function(){
-    zx.testFunctionOK(verifyType, [42, "Number"]); 
-    zx.testFunctionOK(verifyType, ["abc", "String"]);   
-    zx.testFunctionOK(verifyType, [true, "Boolean"]);
-    zx.testFunctionOK(verifyType, [Symbol("zx"), "Symbol"]);
+  zx.verifyType.test = zx.libraryTests['verifyType'] = function(){
+    zx.testFunctionOK(zx.verifyType, [42, "Number"]); 
+    zx.testFunctionOK(zx.verifyType, ["abc", "String"]);   
+    zx.testFunctionOK(zx.verifyType, [true, "Boolean"]);
+    zx.testFunctionOK(zx.verifyType, [Symbol("zx"), "Symbol"]);
     const foo = null;
-    zx.testFunctionOK(verifyType, [foo, "Null"]);
-    zx.testFunctionOK(verifyType, [document.someName, "Undefined"]); 
-    zx.testFunctionOK(verifyType, [[1,[21, 22], 3], "Array"]);
-    zx.testFunctionOK(verifyType, [document.write, "Function"]);
+    zx.testFunctionOK(zx.verifyType, [foo, "Null"]);
+    zx.testFunctionOK(zx.verifyType, [document.someName, "Undefined"]); 
+    zx.testFunctionOK(zx.verifyType, [[1,[21, 22], 3], "Array"]);
+    zx.testFunctionOK(zx.verifyType, [document.write, "Function"]);
     class MyClass {};
-    zx.testFunctionOK(verifyType, [new MyClass(), "Object"]);
+    zx.testFunctionOK(zx.verifyType, [new MyClass(), "Object"]);
   
-    zx.testFunctionKO(verifyType, [42, "someLabel"],'Error: The expectedType parameter must be one of the following values: "Number",'+
+    zx.testFunctionKO(zx.verifyType, [42, "someLabel"],'Error: The expectedType parameter must be one of the following values: "Number",'+
       ' "String", "Boolean", "Symbol", "Null", "Undefined", "Array", "Function", "Object".');
-    zx.testFunctionKO(verifyType, [42, "String"],`TypeError: The value (42) must be of type String, but it is of type Number`);
+    zx.testFunctionKO(zx.verifyType, [42, "String"],`TypeError: The value (42) must be of type String, but it is of type Number`);
     }
   
   
